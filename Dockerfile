@@ -10,7 +10,7 @@ COPY pyproject.toml uv.lock /app/
 
 # Installa uv (gestore dipendenze) e sincronizza le dipendenze dal lockfile
 RUN pip install uv
-RUN uv sync 
+RUN uv pip compile pyproject.toml | uv pip sync -
 
 # Copia il resto dei file sorgenti
 COPY . /app
