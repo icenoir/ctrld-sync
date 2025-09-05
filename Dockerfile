@@ -12,6 +12,6 @@ COPY . /app
 RUN uv sync
 
 # File .env (opzionale): copia se lo usi
-COPY .env /app/.env
+#COPY .env /app/.env
 
 CMD ["python", "main.py"]
