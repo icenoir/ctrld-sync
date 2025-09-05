@@ -1,14 +1,17 @@
 FROM python:3.12-slim
 
-# Install uv, git, e dipendenze di base
+WORKDIR /app
+
+# Installa uv
 RUN pip install uv
 
-# Copia i sorgenti nel container
-WORKDIR /app
+# Copia tutti i sorgenti nella directory /app
 COPY . /app
 
-# Installa le dipendenze del progetto
-RUN uv pip install -r requirements.txt
+# Sincronizza l’ambiente Python con le dipendenze e il progetto tramite uv
+RUN uv sync
 
-# Comando per eseguire lo script principale
+# File .env (opzionale): copia se lo usi
+COPY .env /app/.env
+
 CMD ["python", "main.py"]
