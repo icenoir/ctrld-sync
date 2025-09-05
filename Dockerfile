@@ -12,8 +12,7 @@ RUN uv sync
 
 RUN pip list   # Debug: lista pacchetti installati
 
-# Optional: installazione esplicita pacchetto problematico
-RUN pip install httpx
+RUN pip install python-dotenv httpx 
 
 COPY . .
 
