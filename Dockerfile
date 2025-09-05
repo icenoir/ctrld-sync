@@ -1,19 +1,26 @@
+# Usa la versione Python richiesta dal progetto
 FROM python:3.13-slim
 
-# Installazione delle dipendenze di sistema necessarie per la compilazione (libffi-dev per httpx)
+# Installa dipendenze di sistema necessarie per compilare dipendenze Python
 RUN apt-get update && apt-get install -y build-essential libffi-dev && rm -rf /var/lib/apt/lists/*
 
+# Setta la working directory nel container
 WORKDIR /app
 
-# Copia i file di progetto per installare le dipendenze
+# Copia i file di configurazione per installare le dipendenze prima del codice
 COPY pyproject.toml uv.lock /app/
 
-# Installa uv, poi sincronizza le dipendenze esatte dal lockfile
+# Installa uv e sincronizza l’ambiente in base al lockfile
 RUN pip install uv
 RUN uv sync
 
-# Copia tutto il resto del progetto nello spazio di lavoro
+# Copia il resto del codice sorgente
 COPY . /app
 
-# Comando di avvio del container
+# Imposta variabili d’ambiente (da passare o tramite Dockerfile o docker-compose)
+# ENV TOKEN=your_token_here
+# ENV PROFILE=your_profile_id
+
+# Comando di avvio dell’app
 CMD ["python", "main.py"]
+
