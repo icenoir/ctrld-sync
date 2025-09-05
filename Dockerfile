@@ -1,22 +1,19 @@
-FROM python:3.12-slim
+FROM python:3.13-slim
 
-# Installazione di system dependencies per compilazione, se serve
+# Installazione delle dipendenze di sistema necessarie per la compilazione (libffi-dev per httpx)
 RUN apt-get update && apt-get install -y build-essential libffi-dev && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 
-# Copia i file di progetto (incluso pyproject.toml e uv.lock)
+# Copia i file di progetto per installare le dipendenze
 COPY pyproject.toml uv.lock /app/
 
-# Installa uv (gestore dipendenze) e sincronizza le dipendenze dal lockfile
+# Installa uv, poi sincronizza le dipendenze esatte dal lockfile
 RUN pip install uv
-RUN uv sync --extra build
+RUN uv sync
 
-# Copia il resto dei file sorgenti
+# Copia tutto il resto del progetto nello spazio di lavoro
 COPY . /app
 
-# Esponi la porta se necessario (dipende dal progetto)
-# EXPOSE 8000
-
-# Comando di avvio (adatta se serve)
+# Comando di avvio del container
 CMD ["python", "main.py"]
